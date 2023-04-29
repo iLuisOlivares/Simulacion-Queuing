@@ -1,43 +1,26 @@
 //Objetivo: Simular el comportamiento de una cola de un supermercado
 
-const interrivalTimes = (probabilidad) => {
 
-    if (probabilidad <= 9) {
-        return 2;
-    }
-    if (probabilidad <= 34) {
-        return 4;
-    }
-    if (probabilidad <= 69) {
-        return 6;
-    }
-    if (probabilidad <= 89) {
-        return 8;
-    }
-    else {
-        return 10;
-    }
+const interrival_times_intervals = {
+    9: 2,
+    34: 4,
+    69: 6,
+    89: 8,
+    99: 10
 }
 
-const serviceTimes = (probabilidad) => {
-
-    if (probabilidad <= 14) {
-        return 1;
-    }
-    if (probabilidad <= 31) {
-        return 3;
-    }
-    if (probabilidad <= 61) {
-        return 5;
-    }
-    if (probabilidad <= 89) {
-        return 7;
-    }
-    else {
-        return 9;
-    }
+const service_times_intervals = {
+    14: 1,
+    31: 3,
+    61: 5,
+    89: 7,
+    99: 9
 }
 
+//Obtener minutos de los intervalos
+const getMinutes = (intervals, probabilidad) => {
+    for (const value in intervals) { if (probabilidad <= value) { return intervals[value]; } }
+}
 
 // Funciones auxiliares
 const generarTiempo = () => {
@@ -79,8 +62,8 @@ for (let i = 0; i < numero_iteraciones; i++) {
 
 
     //Generar interrival times y service times
-    const interrival_times = interrivalTimes(random_number_A);
-    const service_times = serviceTimes(random_number_S);
+    const interrival_times = getMinutes(interrival_times_intervals, random_number_A);
+    const service_times = getMinutes(service_times_intervals, random_number_S);
 
 
     //Variables waiting time of customers in Queue e Idle time of server
