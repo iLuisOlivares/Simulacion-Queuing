@@ -1,24 +1,17 @@
-// Parámetros de la simulación
-const tiempoSimulacion = 10000; // tiempo de simulación en unidades de tiempo
+//Objetivo: Simular el comportamiento de una cola de un supermercado
 
-// tiempo actual de la simulación
-let reloj = 0;
-let fecha_arrival = new Date();
-let fecha_service = new Date();
+const interrivalTimes = (probabilidad) => {
 
-
-const InterrivalTimes = (probabilidad) => {
-
-    if (probabilidad < 0.10) {
+    if (probabilidad <= 9) {
         return 2;
     }
-    if (probabilidad < 0.35) {
+    if (probabilidad <= 34) {
         return 4;
     }
-    if (probabilidad < 0.70) {
+    if (probabilidad <= 69) {
         return 6;
     }
-    if (probabilidad < 0.90) {
+    if (probabilidad <= 89) {
         return 8;
     }
     else {
@@ -26,19 +19,18 @@ const InterrivalTimes = (probabilidad) => {
     }
 }
 
-
 const serviceTimes = (probabilidad) => {
 
-    if (probabilidad < 0.15) {
+    if (probabilidad <= 14) {
         return 1;
     }
-    if (probabilidad < 0.32) {
+    if (probabilidad <= 31) {
         return 3;
     }
-    if (probabilidad < 0.62) {
+    if (probabilidad <= 61) {
         return 5;
     }
-    if (probabilidad < 0.90) {
+    if (probabilidad <= 89) {
         return 7;
     }
     else {
@@ -49,46 +41,81 @@ const serviceTimes = (probabilidad) => {
 
 // Funciones auxiliares
 const generarTiempo = () => {
-    return Math.random()
+    return Math.floor(Math.random() * 99);
 }
 
-// Función principal
+//Numeros del libro
+const RANDOM_NUMBER_A = [94, 73, 78, 72, 59, 63, 85, 66, 61, 23, 71, 26, 96, 73, 77, 9, 14, 88, 64, 82]
+const RANDOM_NUMBER_S = [35, 46, 34, 70, 97, 80, 40, 94, 55, 43, 15, 67, 78, 21, 22, 41, 35, 87, 35, 29]
+
+
+//Tiempo actual de la simulación
+let arrival_hour = new Date();
+let service_hour = new Date();
+
+//Inicializamos las horas a las 9:00 am
+arrival_hour.setHours(9, 0, 0, 0);
+service_hour.setHours(9, 0, 0, 0);
+
+// Variables comienzo de servicio y tiempo de llegada del cliente y tiempo de servicio
 let service_start;
 let arrival_time;
 let service_time;
-setInterval(function () {
 
+//Array de objetos en el que guardamos el resultado de cada iteracion
+let arraySimulation = [];
 
-    //Generar numeros aleatorios para Arrival y servie
-    const random_number_A = generarTiempo();
-    const random_number_S = generarTiempo();
+const numero_iteraciones = RANDOM_NUMBER_A.length;
+
+for (let i = 0; i < numero_iteraciones; i++) {
+
+    //Generar numeros aleatorios para Arrival y service
+    // const random_number_A = generarTiempo();
+    // const random_number_S = generarTiempo();
+
+    //Usando los numeros del libro
+    const random_number_A = RANDOM_NUMBER_A[i];
+    const random_number_S = RANDOM_NUMBER_S[i];
 
 
     //Generar interrival times y service times
-    const interrival_times = InterrivalTimes(random_number_A);
+    const interrival_times = interrivalTimes(random_number_A);
     const service_times = serviceTimes(random_number_S);
 
-    fecha_arrival.setMinutes(fecha_arrival.getMinutes() + service_times)
 
-    if (fecha_arrival > fecha_service) {
-        console.log(fecha_arrival.toLocaleTimeString('en-US'), fecha_service.toLocaleTimeString('en-US'), "arrival time es mayor que  service end")
-        arrival_time = fecha_arrival.toLocaleTimeString('en-US');
-        service_start = fecha_arrival.toLocaleTimeString('en-US');
-        fecha_service.setMinutes(fecha_arrival.getMinutes() + service_times)
-        service_time = fecha_service.toLocaleTimeString('en-US');
+    //Variables waiting time of customers in Queue e Idle time of server
+    let idle_time = 0;
+    let waiting_time = 0;
 
+    //Auxiliar para guardar la hora anterior de llegada de cliente
+    arrival_hour.setMinutes(arrival_hour.getMinutes() + interrival_times)
+    let last_arrival_minutes = arrival_hour.getMinutes();
+
+    if (arrival_hour > service_hour) {
+
+        arrival_time = arrival_hour.toLocaleTimeString('en-US');
+        service_start = arrival_hour.toLocaleTimeString('en-US');
+        idle_time = last_arrival_minutes - service_hour.getMinutes();
+
+        service_hour.setMinutes(arrival_hour.getMinutes() + service_times)
+        service_time = service_hour.toLocaleTimeString('en-US');
 
     } else {
-        service_start = fecha_service.toLocaleTimeString('en-US');
-        arrival_time = fecha_arrival.toLocaleTimeString('en-US');
+        service_start = service_hour.toLocaleTimeString('en-US');
+        arrival_time = arrival_hour.toLocaleTimeString('en-US');
+        waiting_time = service_hour.getMinutes() - arrival_hour.getMinutes()
 
-        fecha_service.setMinutes(fecha_service.getMinutes() + service_times);
-        service_time = fecha_service.toLocaleTimeString('en-US');
+        service_hour.setMinutes(service_hour.getMinutes() + service_times);
+        service_time = service_hour.toLocaleTimeString('en-US');
 
     }
 
 
+    arraySimulation.push({ random_number_A, interrival_times, arrival_time, service_start, random_number_S, service_times, service_time, waiting_time, idle_time })
+}
 
-    console.table({ random_number_A, interrival_times, arrival_time, service_start, random_number_S, service_times, service_time })
-}, 1000);
-
+console.table(arraySimulation)
+console.table({
+    total_waiting_time: arraySimulation.reduce((acc, curr) => acc + curr.waiting_time, 0),
+    total_idle_time: arraySimulation.reduce((acc, curr) => acc + curr.idle_time, 0),
+})
