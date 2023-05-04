@@ -1,5 +1,5 @@
 //Objetivo: Simular el comportamiento de una cola de un supermercado
-
+//By Luis Olivares
 
 const interrival_times_intervals = {
     9: 2,
@@ -36,8 +36,10 @@ const calcularDiffHoras = (fecha1, fecha2) => {
 // const RANDOM_NUMBER_A = [94, 73, 78, 72, 59, 63, 85, 66, 61, 23, 71, 26, 96, 73, 77, 9, 14, 88, 64, 82]
 // const RANDOM_NUMBER_S = [35, 46, 34, 70, 97, 80, 40, 94, 55, 43, 15, 67, 78, 21, 22, 41, 35, 87, 35, 29]
 
-const RANDOM_NUMBER_A = [25, 16, 24, 10, 27, 20, 10, 14, 5, 23, 35, 27, 38, 11, 22, 11, 25, 17, 15, 9]
-const RANDOM_NUMBER_S = [94, 90, 98, 72, 89, 73, 95, 86, 91, 83, 61, 86, 76, 93, 87, 97, 94, 78, 84, 92]
+//Numeros para comparar con whatif2
+const RANDOM_NUMBER_A = [35, 26, 34, 10, 47, 30, 51, 24, 55, 33, 75, 37, 18, 21, 32, 41, 15, 37, 15, 9]
+const RANDOM_NUMBER_S = [64, 90, 98, 42, 89, 23, 95, 66, 51, 43, 51, 56, 66, 93, 57, 97, 74, 58, 84, 92]
+
 
 
 //Tiempo actual de la simulación

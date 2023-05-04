@@ -1,5 +1,5 @@
-//Objetivo: Simular el comportamiento de una cola de un supermercado
-
+//Objetivo: Simular el comportamiento de una cola de un supermercado si los numeros randoms son limitados de manera que la intencion es que los tiempos de llegada de los clientes sean menores y los tiempo de servicio sean mayores,
+//By Luis Olivares
 
 const interrival_times_intervals = {
     9: 2,
