@@ -27,17 +27,10 @@ const generarTiempo = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-const calcularDiffHoras = (fecha1, fecha2) => {
+const calcularDifHoras = (fecha1, fecha2) => {
     const diff = (fecha2.getTime() - fecha1.getTime()) / 1000 / 60
     return Math.abs(Math.round(diff));
 }
-
-//Numeros del libro
-// const RANDOM_NUMBER_A = [94, 73, 78, 72, 59, 63, 85, 66, 61, 23, 71, 26, 96, 73, 77, 9, 14, 88, 64, 82]
-// const RANDOM_NUMBER_S = [35, 46, 34, 70, 97, 80, 40, 94, 55, 43, 15, 67, 78, 21, 22, 41, 35, 87, 35, 29]
-
-const RANDOM_NUMBER_A = [25, 16, 24, 10, 27, 20, 10, 14, 5, 23, 35, 27, 38, 11, 22, 11, 25, 17, 15, 9]
-const RANDOM_NUMBER_S = [94, 90, 98, 72, 89, 73, 95, 86, 91, 83, 61, 86, 76, 93, 87, 97, 94, 78, 84, 92]
 
 
 //Tiempo actual de la simulación
@@ -56,17 +49,14 @@ let service_time;
 //Array de objetos en el que guardamos el resultado de cada iteracion
 let arraySimulation = [];
 
+
 const numero_iteraciones = RANDOM_NUMBER_A.length;
 
 for (let i = 0; i < numero_iteraciones; i++) {
 
     //Generar numeros aleatorios para Arrival y service
-    // const random_number_A = generarTiempo(0, 99);
-    // const random_number_S = generarTiempo(0, 99);
-
-    //Usando los numeros del libro
-    const random_number_A = RANDOM_NUMBER_A[i];
-    const random_number_S = RANDOM_NUMBER_S[i];
+    const random_number_A = generarTiempo(0, 20);
+    const random_number_S = generarTiempo(80, 99);
 
 
     //Generar interrival times y service times
@@ -86,7 +76,7 @@ for (let i = 0; i < numero_iteraciones; i++) {
 
         arrival_time = arrival_hour.toLocaleTimeString('en-US');
         service_start = arrival_hour.toLocaleTimeString('en-US');
-        idle_time = calcularDiffHoras(last_arrival_minutes, service_hour)
+        idle_time = calcularDifHoras(last_arrival_minutes, service_hour)
 
         service_hour.setHours(arrival_hour.getHours());
         service_hour.setMinutes(arrival_hour.getMinutes() + service_times)
@@ -95,7 +85,7 @@ for (let i = 0; i < numero_iteraciones; i++) {
     } else {
         service_start = service_hour.toLocaleTimeString('en-US');
         arrival_time = arrival_hour.toLocaleTimeString('en-US');
-        waiting_time = calcularDiffHoras(service_hour, arrival_hour)
+        waiting_time = calcularDifHoras(service_hour, arrival_hour)
 
         service_hour.setHours(service_hour.getHours());
         service_hour.setMinutes(service_hour.getMinutes() + service_times);
