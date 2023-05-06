@@ -55,13 +55,13 @@ const numero_iteraciones = RANDOM_NUMBER_A.length;
 for (let i = 0; i < numero_iteraciones; i++) {
 
     //Generar numeros aleatorios para Arrival y service
-    const random_number_A = generarTiempo(0, 20);
-    const random_number_S = generarTiempo(80, 99);
+    const random_number_Arrival = generarTiempo(0, 20);
+    const random_number_Service = generarTiempo(80, 99);
 
 
     //Generar interrival times y service times
-    const interrival_times = getMinutes(interrival_times_intervals, random_number_A);
-    const service_times = getMinutes(service_times_intervals, random_number_S);
+    const interrival_times = getMinutes(interrival_times_intervals, random_number_Arrival);
+    const service_times = getMinutes(service_times_intervals, random_number_Service);
 
 
     //Variables waiting time of customers in Queue e Idle time of server
@@ -94,7 +94,7 @@ for (let i = 0; i < numero_iteraciones; i++) {
     }
 
 
-    arraySimulation.push({ random_number_A, interrival_times, arrival_time, service_start, random_number_S, service_times, service_time, waiting_time, idle_time })
+    arraySimulation.push({ random_number_Arrival, interrival_times, arrival_time, service_start, random_number_Service, service_times, service_time, waiting_time, idle_time })
 }
 
 console.table(arraySimulation)

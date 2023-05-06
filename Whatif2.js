@@ -43,8 +43,8 @@ const calcularDifHoras = (fecha1, fecha2) => {
 }
 
 //Numeros de representacion
-const RANDOM_NUMBER_A = [35, 26, 34, 10, 47, 30, 51, 24, 55, 33, 75, 37, 18, 21, 32, 41, 15, 37, 15, 9]
-const RANDOM_NUMBER_S = [64, 90, 98, 42, 89, 23, 95, 66, 51, 43, 51, 56, 66, 93, 57, 97, 74, 58, 84, 92]
+const RANDOM_NUMBER_ARRIVAL = [35, 26, 34, 10, 47, 30, 51, 24, 55, 33, 75, 37, 18, 21, 32, 41, 15, 37, 15, 9]
+const RANDOM_NUMBER_SERVICE = [64, 90, 98, 42, 89, 23, 95, 66, 51, 43, 51, 56, 66, 93, 57, 97, 74, 58, 84, 92]
 
 
 //Tiempo actual de la simulación
@@ -63,27 +63,31 @@ let service_time;
 //Array de objetos en el que guardamos el resultado de cada iteracion
 let arraySimulation = [];
 
-const numero_iteraciones = RANDOM_NUMBER_A.length;
+const numero_iteraciones = RANDOM_NUMBER_ARRIVAL.length;
 let last_waiting = 0
 for (let i = 0; i < numero_iteraciones; i++) {
 
     //Generar numeros aleatorios para Arrival y service
-    // const random_number_A = generarTiempo(0, 99);
-    // const random_number_S = generarTiempo(0, 99);
+    // const random_number_Arrival = generarTiempo(0, 99);
+    // const random_number_Service = generarTiempo(0, 99);
 
     //Usando los numeros del libro
-    const random_number_A = RANDOM_NUMBER_A[i];
-    const random_number_S = RANDOM_NUMBER_S[i];
+    const random_number_Arrival = RANDOM_NUMBER_ARRIVAL[i];
+    const random_number_Service = RANDOM_NUMBER_SERVICE[i];
 
 
     //Generar interrival times y service times
-    const interrival_times = getMinutes(interrival_times_intervals, random_number_A);
+    const interrival_times = getMinutes(interrival_times_intervals, random_number_Arrival);
 
-    const service_times = (last_waiting > 5)
-        ? getMinutes(service_times_intervals, random_number_S)
-        : getMinutes(service_times_fast_intervals, random_number_S)
-
-
+    // let service_times = (last_waiting > 5)
+    //     ? getMinutes(service_times_intervals, random_number_Service)
+    //     : getMinutes(service_times_fast_intervals, random_number_Service)
+    let service_times;
+    if (last_waiting > 5) {
+        service_times = getMinutes(service_times_intervals, random_number_Service)
+    } else {
+        service_times = getMinutes(service_times_fast_intervals, random_number_Service)
+    }
     //Variables waiting time of customers in Queue e Idle time of server
     let idle_time = 0;
     let waiting_time = 0;
@@ -112,7 +116,7 @@ for (let i = 0; i < numero_iteraciones; i++) {
 
     last_waiting = waiting_time
 
-    arraySimulation.push({ random_number_A, interrival_times, arrival_time, service_start, random_number_S, service_times, service_time, waiting_time, idle_time })
+    arraySimulation.push({ random_number_Arrival, interrival_times, arrival_time, service_start, random_number_Service, service_times, service_time, waiting_time, idle_time })
 }
 
 console.table(arraySimulation)
